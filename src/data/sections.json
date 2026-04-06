@@ -1,0 +1,50 @@
+{
+  "before_trip": {
+    "title": "Перед поездкой",
+    "slug": "before-trip",
+    "subsections": [
+      {"title": "Стоит ли ехать", "slug": "is-it-worth"},
+      {"title": "Когда ехать", "slug": "when-to-go"},
+      {"title": "Цены и бюджет", "slug": "prices"},
+      {"title": "Виза и документы", "slug": "visa"},
+      {"title": "Перелёт и как добраться", "slug": "flights"},
+      {"title": "Где жить", "slug": "accommodation"},
+      {"title": "Что нужно знать", "slug": "need-to-know"},
+      {"title": "Что взять с собой", "slug": "packing"}
+    ]
+  },
+  "on_island": {
+    "title": "На острове",
+    "slug": "on-island",
+    "subsections": [
+      {"title": "Где поесть", "slug": "food"},
+      {"title": "Что посмотреть", "slug": "sights"},
+      {"title": "Транспорт", "slug": "transport"},
+      {"title": "Экскурсии", "slug": "excursions"},
+      {"title": "Пляжи", "slug": "beaches"},
+      {"title": "Покупки и магазины", "slug": "shopping"},
+      {"title": "Связь и интернет", "slug": "internet"},
+      {"title": "Срочные ситуации", "slug": "emergency"}
+    ]
+  },
+  "trip_plan": {
+    "title": "План поездки",
+    "slug": "trip-plan",
+    "subsections": [
+      {"title": "Маршруты", "slug": "routes"},
+      {"title": "Готовые планы", "slug": "ready-plans"},
+      {"title": "Чек-листы", "slug": "checklists"}
+    ]
+  },
+  "tips": {
+    "title": "Советы и лайфхаки",
+    "slug": "tips",
+    "subsections": [
+      {"title": "Ошибки туристов", "slug": "mistakes"},
+      {"title": "Разводы", "slug": "scams"},
+      {"title": "Экономия", "slug": "saving"},
+      {"title": "Реальный опыт", "slug": "experience"},
+      {"title": "FAQ", "slug": "faq"}
+    ]
+  }
+}

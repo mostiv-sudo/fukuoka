@@ -1,0 +1,174 @@
+'use client'
+
+import Link from "next/link"
+import { useState } from "react"
+import { usePathname } from "next/navigation"
+
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet"
+
+import {
+  Search,
+  Menu,
+  Plane,
+  Hotel,
+  UtensilsCrossed,
+  MapPin,
+  Car,
+  DollarSign,
+  Lightbulb,
+  Map as MapIcon
+} from "lucide-react"
+
+
+/**
+ * Основные пункты меню
+ * label — текст
+ * path — ссылка
+ * icon — иконка lucide
+ */
+const menuItems = [
+  { label: "Перед поездкой", path: "/before-trip", icon: Plane },
+  { label: "Жильё", path: "/accommodation", icon: Hotel },
+  { label: "Еда", path: "/food", icon: UtensilsCrossed },
+  { label: "Что посмотреть", path: "/on-island/sights", icon: MapPin },
+  { label: "Транспорт", path: "/transport", icon: Car },
+  { label: "Цены", path: "/prices", icon: DollarSign },
+  { label: "Практика", path: "/practical", icon: Lightbulb },
+  { label: "Советы", path: "/tips", icon: Lightbulb },
+  { label: "Маршруты", path: "/trip-plan", icon: MapIcon },
+]
+
+export function Header() {
+  // текущий путь (для active menu)
+  const pathname = usePathname()
+
+  // состояние мобильного меню
+  const [open, setOpen] = useState(false)
+
+  return (
+    <header className="border-b bg-background sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+
+        {/* ========================= */}
+        {/* Logo */}
+        {/* ========================= */}
+        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
+          🏝️ Фукуок.Гид
+        </Link>
+
+
+        {/* ========================= */}
+        {/* Desktop navigation */}
+        {/* ========================= */}
+        <nav className="hidden lg:flex items-center gap-1">
+          {menuItems.map((item) => {
+            const Icon = item.icon
+
+            // проверка активной страницы
+            const active = pathname.startsWith(item.path)
+
+            return (
+              <Button
+                key={item.path}
+                variant={active ? "secondary" : "ghost"}
+                size="sm"
+                asChild
+              >
+                <Link href={item.path} className="flex items-center gap-1">
+                  <Icon size={16} />
+                  {item.label}
+                </Link>
+              </Button>
+            )
+          })}
+        </nav>
+
+
+        {/* ========================= */}
+        {/* Right side */}
+        {/* ========================= */}
+        <div className="flex items-center gap-2">
+
+          {/* ========================= */}
+          {/* Search input (desktop) */}
+          {/* ========================= */}
+          <div className="hidden md:flex items-center relative">
+            <Search className="absolute left-2 h-4 w-4 text-muted-foreground" />
+
+            <Input
+              placeholder="Поиск..."
+              className="pl-8 w-[200px]"
+            />
+          </div>
+
+
+          {/* ========================= */}
+          {/* Mobile menu */}
+          {/* ========================= */}
+          <Sheet open={open} onOpenChange={setOpen}>
+
+            {/* кнопка открытия */}
+            <SheetTrigger asChild className="lg:hidden">
+              <Button variant="ghost" size="icon">
+                <Menu className="w-5 h-5" />
+              </Button>
+            </SheetTrigger>
+
+            {/* ========================= */}
+            {/* Mobile sidebar */}
+            {/* ========================= */}
+            <SheetContent side="left" className="w-[300px]">
+
+              {/* REQUIRED для accessibility */}
+              <SheetHeader>
+                <SheetTitle>Меню</SheetTitle>
+              </SheetHeader>
+
+              <div className="flex flex-col gap-2 mt-6">
+
+                {/* mobile menu items */}
+                {menuItems.map((item) => {
+                  const Icon = item.icon
+                  const active = pathname.startsWith(item.path)
+
+                  return (
+                    <Button
+                      key={item.path}
+                      variant={active ? "secondary" : "ghost"}
+                      className="justify-start"
+                      asChild
+                      onClick={() => setOpen(false)}
+                    >
+                      <Link href={item.path}>
+                        <Icon className="w-4 h-4 mr-2" />
+                        {item.label}
+                      </Link>
+                    </Button>
+                  )
+                })}
+
+                {/* mobile search button */}
+                <Link href="/search" onClick={() => setOpen(false)}>
+                  <Button variant="outline" className="justify-start w-full">
+                    <Search className="w-4 h-4 mr-2" />
+                    Поиск
+                  </Button>
+                </Link>
+
+              </div>
+            </SheetContent>
+          </Sheet>
+
+        </div>
+      </div>
+    </header>
+  )
+}

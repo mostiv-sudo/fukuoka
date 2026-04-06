@@ -1,65 +1,298 @@
-import Image from "next/image";
+import Link from "next/link"
+import {
+  Search,
+  UtensilsCrossed,
+  MapPin,
+  Waves,
+  Car,
+  DollarSign,
+  FileText,
+  AlertCircle,
+  TrendingUp,
+  Plane,
+  Hotel,
+  Heart,
+  Phone,
+  Wifi,
+  ShoppingBag,
+} from "lucide-react"
 
 export default function Home() {
+  const quickActions = [
+    { icon: UtensilsCrossed, label: "Где поесть", path: "/food" },
+    { icon: MapPin, label: "Что посмотреть", path: "/sights" },
+    { icon: Waves, label: "Пляжи", path: "/beaches" },
+    { icon: Car, label: "Транспорт", path: "/transport" },
+    { icon: DollarSign, label: "Цены", path: "/prices" },
+    { icon: FileText, label: "Виза", path: "/before-trip/visa" },
+    { icon: AlertCircle, label: "Помощь", path: "/help" },
+  ]
+
+  const urgentNeeds = [
+    { icon: Phone, label: "Такси", path: "/taxi" },
+    { icon: AlertCircle, label: "Аптека", path: "/pharmacy" },
+    { icon: Wifi, label: "Интернет", path: "/internet" },
+    { icon: ShoppingBag, label: "Магазины", path: "/shops" },
+  ]
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
+    <div className="bg-zinc-50 min-h-screen">
+
+      {/* HERO */}
+      <section className="px-4 pt-16 pb-24">
+        <div className="max-w-5xl mx-auto text-center">
+
+          <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
+            Гид по Фукуоку
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="text-muted-foreground mt-3 text-lg">
+            Всё что нужно туристу — быстро и без воды
           </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
+
+          {/* Search */}
+          <div className="relative mt-8">
+            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground" />
+
+            <input
+              placeholder="Где поесть, пляжи, цены, виза..."
+              className="
+                w-full 
+                h-14 
+                pl-12 
+                pr-4 
+                rounded-2xl 
+                border 
+                bg-white 
+                shadow-sm
+                focus:outline-none 
+                focus:ring-2 
+                focus:ring-blue-500
+              "
             />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+          </div>
+
+          {/* tags */}
+          <div className="flex flex-wrap justify-center gap-2 mt-4">
+            {["где поесть", "пляжи", "виза", "цены"].map((tag) => (
+              <button
+                key={tag}
+                className="px-4 py-1.5 rounded-full bg-white shadow-sm text-sm hover:bg-zinc-100"
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+
         </div>
-      </main>
+      </section>
+
+      {/* QUICK ACTIONS FLOAT */}
+      <section className="px-4 -mt-16">
+        <div className="
+          max-w-6xl 
+          mx-auto 
+          bg-white 
+          rounded-3xl 
+          shadow-lg 
+          p-6
+        ">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4">
+
+            {quickActions.map((action) => (
+              <Link
+                key={action.label}
+                href={action.path}
+                className="
+                  flex flex-col 
+                  items-center 
+                  gap-2 
+                  p-4 
+                  rounded-2xl 
+                  hover:bg-zinc-50 
+                  transition
+                  group
+                "
+              >
+                <div className="
+                  p-3 
+                  rounded-2xl 
+                  bg-blue-50 
+                  group-hover:bg-blue-100
+                ">
+                  <action.icon size={22} className="text-blue-600" />
+                </div>
+
+                <span className="text-sm text-center">
+                  {action.label}
+                </span>
+              </Link>
+            ))}
+
+          </div>
+        </div>
+      </section>
+
+      {/* POPULAR */}
+      <section className="max-w-6xl mx-auto px-4 mt-14">
+        <div className="flex items-center gap-2 mb-6">
+          <TrendingUp className="text-orange-500" />
+          <h2 className="text-2xl font-semibold">Популярные</h2>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+
+          {[1,2,3].map((i)=>(
+            <Link
+              key={i}
+              href="/"
+              className="
+                bg-white 
+                rounded-3xl 
+                shadow-sm 
+                hover:shadow-md 
+                transition 
+                overflow-hidden
+              "
+            >
+              <div className="h-40 bg-gradient-to-br from-blue-400 to-blue-600" />
+
+              <div className="p-5">
+                <div className="text-sm text-blue-600 mb-1">
+                  Транспорт
+                </div>
+
+                <h3 className="font-semibold">
+                  Как арендовать байк на Фукуоке
+                </h3>
+              </div>
+            </Link>
+          ))}
+
+        </div>
+      </section>
+
+      {/* PLANNING */}
+      <section className="max-w-6xl mx-auto px-4 mt-16">
+        <h2 className="text-2xl font-semibold mb-6">
+          Планируете поездку
+        </h2>
+
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+          {[Plane,Hotel,DollarSign,FileText].map((Icon,i)=>(
+            <Link
+              key={i}
+              href="/"
+              className="
+                bg-white 
+                rounded-2xl 
+                p-6 
+                shadow-sm 
+                hover:shadow-md 
+                transition
+                flex 
+                flex-col 
+                items-center 
+                gap-3
+              "
+            >
+              <div className="p-3 rounded-2xl bg-green-50">
+                <Icon className="text-green-600" />
+              </div>
+
+              <span className="text-sm font-medium">
+                Раздел
+              </span>
+            </Link>
+          ))}
+
+        </div>
+      </section>
+
+      {/* COLLECTIONS */}
+      <section className="px-4 mt-16">
+        <div className="
+          max-w-6xl 
+          mx-auto 
+          bg-gradient-to-br 
+          from-orange-50 
+          to-yellow-50 
+          rounded-3xl 
+          p-8
+        ">
+          <div className="flex items-center gap-2 mb-6">
+            <Heart className="text-red-500" />
+            <h2 className="text-2xl font-semibold">
+              Подборки
+            </h2>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+
+            {["ТОП рестораны","Лучшие пляжи","Маршруты"].map((title)=>(
+              <Link
+                key={title}
+                href="/"
+                className="
+                  bg-white 
+                  rounded-2xl 
+                  p-6 
+                  shadow-sm 
+                  hover:shadow-lg 
+                  transition
+                "
+              >
+                <div className="text-4xl mb-3">🔥</div>
+
+                <h3 className="font-semibold text-lg">
+                  {title}
+                </h3>
+              </Link>
+            ))}
+
+          </div>
+        </div>
+      </section>
+
+      {/* URGENT */}
+      <section className="max-w-6xl mx-auto px-4 mt-16 pb-16">
+        <div className="bg-red-50 rounded-3xl p-6">
+
+          <div className="flex items-center gap-2 mb-4">
+            <AlertCircle className="text-red-600" />
+            <h2 className="text-xl font-semibold">
+              Срочно нужно
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+            {urgentNeeds.map((need)=>(
+              <Link
+                key={need.label}
+                href={need.path}
+                className="
+                  bg-white 
+                  rounded-2xl 
+                  p-4 
+                  flex 
+                  items-center 
+                  gap-2 
+                  hover:bg-red-100 
+                  transition
+                "
+              >
+                <need.icon size={18} className="text-red-600"/>
+                <span>{need.label}</span>
+              </Link>
+            ))}
+
+          </div>
+
+        </div>
+      </section>
+
     </div>
-  );
+  )
 }
