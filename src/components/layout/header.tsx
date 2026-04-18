@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { useState } from "react"
 import { usePathname } from "next/navigation"
-
+import SearchInput from '@/components/ui/SearchInput';
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
@@ -23,9 +23,11 @@ import {
   MapPin,
   Car,
   DollarSign,
+  AlertCircle,
   Lightbulb,
   Map as MapIcon
 } from "lucide-react"
+
 
 
 /**
@@ -41,9 +43,9 @@ const menuItems = [
   { label: "Что посмотреть", path: "/on-island/sights", icon: MapPin },
   { label: "Транспорт", path: "/transport", icon: Car },
   { label: "Цены", path: "/prices", icon: DollarSign },
-  { label: "Практика", path: "/practical", icon: Lightbulb },
   { label: "Советы", path: "/tips", icon: Lightbulb },
   { label: "Маршруты", path: "/trip-plan", icon: MapIcon },
+  { label: "Срочно", path: "/practical", icon: AlertCircle },
 ]
 
 export function Header() {
@@ -58,7 +60,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* ========================= */}
-        {/* Logo */}
+        {/* Logo */} 
         {/* ========================= */}
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
           🏝️ Фукуок.Гид
@@ -68,7 +70,7 @@ export function Header() {
         {/* ========================= */}
         {/* Desktop navigation */}
         {/* ========================= */}
-        <nav className="hidden lg:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center gap-1">
           {menuItems.map((item) => {
             const Icon = item.icon
 
@@ -100,12 +102,12 @@ export function Header() {
           {/* ========================= */}
           {/* Search input (desktop) */}
           {/* ========================= */}
-          <div className="hidden md:flex items-center relative">
-            <Search className="absolute left-2 h-4 w-4 text-muted-foreground" />
+          <div className="hidden sm:flex items-center relative">
+            
 
-            <Input
+            <SearchInput 
               placeholder="Поиск..."
-              className="pl-8 w-[200px]"
+              isSmall={true}
             />
           </div>
 
@@ -116,7 +118,7 @@ export function Header() {
           <Sheet open={open} onOpenChange={setOpen}>
 
             {/* кнопка открытия */}
-            <SheetTrigger asChild className="lg:hidden">
+            <SheetTrigger asChild className="xl:hidden">
               <Button variant="ghost" size="icon">
                 <Menu className="w-5 h-5" />
               </Button>
@@ -133,6 +135,13 @@ export function Header() {
               </SheetHeader>
 
               <div className="flex flex-col gap-2 mt-6">
+
+                {/* mobile search button */}
+                <SearchInput 
+                  placeholder="Поиск..." 
+                  isSmall={true} 
+                  classMore="w-full"
+                />
 
                 {/* mobile menu items */}
                 {menuItems.map((item) => {
@@ -155,13 +164,8 @@ export function Header() {
                   )
                 })}
 
-                {/* mobile search button */}
-                <Link href="/search" onClick={() => setOpen(false)}>
-                  <Button variant="outline" className="justify-start w-full">
-                    <Search className="w-4 h-4 mr-2" />
-                    Поиск
-                  </Button>
-                </Link>
+                
+                
 
               </div>
             </SheetContent>

@@ -1,4 +1,5 @@
 import Link from "next/link"
+import SearchInput from "@/components/ui/SearchInput"
 import {
   Search,
   UtensilsCrossed,
@@ -52,23 +53,9 @@ export default function Home() {
 
           {/* Search */}
           <div className="relative mt-8">
-            <Search className="absolute left-5 top-1/2 -translate-y-1/2 text-muted-foreground" />
 
-            <input
+            <SearchInput
               placeholder="Где поесть, пляжи, цены, виза..."
-              className="
-                w-full 
-                h-14 
-                pl-12 
-                pr-4 
-                rounded-2xl 
-                border 
-                bg-white 
-                shadow-sm
-                focus:outline-none 
-                focus:ring-2 
-                focus:ring-blue-500
-              "
             />
           </div>
 

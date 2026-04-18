@@ -1,4 +1,6 @@
-import sections from '../../../data/sections.json'
+import type { Metadata } from 'next'
+import getData from '@/lib/dataLocalOrServer'
+import type { Section, SectionPageProps } from '@/shared/types/section.type'
 import Link from 'next/link'
 import {
   FileText,
@@ -11,24 +13,6 @@ import {
   HelpCircle
 } from "lucide-react"
 
-interface Subsection {
-  title: string
-  slug: string
-  description?: string
-  icon?: string
-}
-
-interface Section {
-  title: string
-  slug: string
-  description?: string
-  subsections: Subsection[]
-}
-
-interface SectionPageProps {
-  params: Promise<{ section: string }>
-}
-
 const icons = {
   worth: HelpCircle,
   when: Calendar,
@@ -40,23 +24,70 @@ const icons = {
   packing: Package
 }
 
+async function getSections(): Promise<Section[]> {
+  const sectionsData = Object.values(await getData('sections'))
+  return sectionsData as Section[]
+}
+
+export async function generateStaticParams() {
+  const sectionsData = await getSections()
+  const sections = sectionsData as Section[]
+
+  // Генерируем параметры для всех существующих разделов
+  return sections.map((section) => ({
+    section: section.slug,   
+  }))
+}
+
+export async function generateMetadata(
+  { params }: SectionPageProps
+): Promise<Metadata> {
+
+  const { section: sectionParam } = await params
+
+  const sections = await getSections()
+
+  const section = sections.find(s => s.slug === sectionParam)
+
+  // 🔒 защита от падения build
+  if (!section) {
+    console.error('❌ Section not found:', sectionParam)
+    console.log('👉 Available:', sections.map(s => s.slug))
+
+    return {
+      title: 'Раздел не найден',
+      description: 'Раздел не существует',
+    }
+  }
+
+  return {
+    title: section.seo?.title ?? section.title,
+    description: section.seo?.description ?? section.description ?? '',
+    keywords: section.seo?.keywords ?? [],
+  }
+}
+
 export default async function SectionPage({ params }: SectionPageProps) {
   const { section: sectionParam } = await params
 
+  const sections = await getSections()   
+  
+  
+  
   const section = Object.values(sections).find(
     s => s.slug === sectionParam
   ) as Section | undefined
 
   if (!section) {
     return (
-      <div className="p-10 text-center">
+      <div className="p-10 text-center text-2xl">
         Раздел не найден
       </div>
     )
   }
 
   return (
-    <div className="bg-zinc-50 min-h-screen py-12">
+    <div className="bg-zinc-50 min-h-[calc(100vh-65px)] py-12">
 
       <div className="max-w-7xl mx-auto px-4">
 

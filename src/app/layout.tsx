@@ -60,7 +60,7 @@ export default function RootLayout({
         <Header />
 
         {/* Main content */}
-        <main className="flex-1">
+        <main className="relative flex-1">
           {children}
         </main>
         {/* Footer */}

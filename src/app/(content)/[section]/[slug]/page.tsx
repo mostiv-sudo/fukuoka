@@ -1,36 +1,51 @@
-import articlesJson from '../../../../data/articles.json'
+import getData from '@/lib/dataLocalOrServer'
 import Link from 'next/link'
+// вынес типы в отделный файл
+import type {ContentBlock, Article , ArticlePageProps, } from '@/shared/types/article.type' 
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
+import type { Metadata } from 'next'
 
-// Типы контента статьи
-interface ContentBlockText {
-  type: 'text'
-  text: string
+
+async function getArticles(): Promise<Article[]> {
+  const articlesData = await getData('articles')
+  return articlesData as Article[]
 }
 
-interface ContentBlockList {
-  type: 'list'
-  items?: string[]
+export async function generateStaticParams() {
+  const articlesData = await getArticles()
+  const articles = articlesData as Article[]
+
+  // Генерируем параметры для всех существующих разделов
+  return articles.map((section) => ({
+    section: section.slug,   
+  }))
 }
 
-interface ContentBlockTips {
-  type: 'tips'
-  title: string
-  text: string
-}
+export async function generateMetadata(
+  { params }: ArticlePageProps
+): Promise<Metadata> {
+  const { section: sectionParam } = await params
+  const articles = await getArticles()          
 
-type ContentBlock = ContentBlockText | ContentBlockList | ContentBlockTips
+  const article = articles.find(s => s.slug === sectionParam)
 
-interface Article {
-  id: string
-  title: string
-  slug: string
-  section: string
-  subsection: string
-  description: string
-  content_blocks: ContentBlock[]
-  related_collections: string[]
-  seo?: Record<string, unknown>
+  if (!article) {
+    return {
+      title: 'Статья не найдена',
+    }
+  }
+
+  return {
+    title: article.seo.title,
+    description: article.seo.description,
+    keywords: [
+      'путешествия',
+      article.title.toLowerCase(),
+      'виза',
+      'билеты',
+      ...article.seo.keywords
+    ],
+  }
 }
 
 function isContentBlock(block: unknown): block is ContentBlock {
@@ -42,19 +57,15 @@ function isContentBlock(block: unknown): block is ContentBlock {
   return false
 }
 
-const articles: Article[] = articlesJson as Article[]
-
-interface ArticlePageProps {
-  params: Promise<{ section: string; slug: string }>
-}
-
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { section, slug } = await params
+  const articles = await getArticles()
+
   const article = articles.find(a => a.slug === slug)
 
   if (!article) {
     return (
-      <div className="p-10 text-center">
+      <div className="p-10 text-center text-2xl">
         Статья не найдена
       </div>
     )
@@ -79,7 +90,13 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div className="mb-8">
 
             <div className="text-sm text-muted-foreground mb-2">
-              {article.section} / {article.subsection}
+              <Link href={`/${article.section}`} className="hover:underline">
+                {article.section}
+              </Link>
+              / 
+              <Link href={`/${article.section}/${article.subsection}`} className="hover:underline">
+                {article.subsection}
+              </Link>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">

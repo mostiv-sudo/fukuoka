@@ -5,7 +5,7 @@ import { Home, Search } from "lucide-react";
 
 export default function NotFound() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center px-4">
+    <div className="min-h-[calc(100vh-65px)] bg-gradient-to-br from-blue-600 to-purple-600 flex items-center justify-center px-4">
       <div className="text-center text-white max-w-2xl">
         <h1 className="text-9xl font-bold mb-4">404</h1>
         <h2 className="text-4xl mb-6">Страница не найдена</h2>
