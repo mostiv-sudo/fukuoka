@@ -29,34 +29,27 @@ async function getSections(): Promise<Section[]> {
   return sectionsData as Section[]
 }
 
+// ---------- ГЕНЕРАЦИЯ СТАТИЧЕСКИХ ПАРАМЕТРОВ ----------
 export async function generateStaticParams() {
-  const sectionsData = await getSections()
-  const sections = sectionsData as Section[]
-
-  // Генерируем параметры для всех существующих разделов
+  const sections = await getSections()
   return sections.map((section) => ({
-    section: section.slug,   
+    section: section.slug,
   }))
 }
 
-export async function generateMetadata(
-  { params }: SectionPageProps
-): Promise<Metadata> {
-
+// ---------- МЕТАДАННЫЕ ----------
+export async function generateMetadata({
+  params,
+}: SectionPageProps): Promise<Metadata> {
   const { section: sectionParam } = await params
-
   const sections = await getSections()
+  const section = sections.find((s) => s.slug === sectionParam)
 
-  const section = sections.find(s => s.slug === sectionParam)
-
-  // 🔒 защита от падения build
   if (!section) {
     console.error('❌ Section not found:', sectionParam)
-    console.log('👉 Available:', sections.map(s => s.slug))
-
     return {
       title: 'Раздел не найден',
-      description: 'Раздел не существует',
+      description: 'Такой раздел не существует',
     }
   }
 
@@ -71,7 +64,6 @@ export default async function SectionPage({ params }: SectionPageProps) {
   const { section: sectionParam } = await params
 
   const sections = await getSections()   
-  
   
   
   const section = Object.values(sections).find(

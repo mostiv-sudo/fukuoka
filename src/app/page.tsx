@@ -56,20 +56,12 @@ export default function Home() {
 
             <SearchInput
               placeholder="Где поесть, пляжи, цены, виза..."
+              arrTags={["где поесть", "пляжи", "виза", "цены"]}
             />
           </div>
 
           {/* tags */}
-          <div className="flex flex-wrap justify-center gap-2 mt-4">
-            {["где поесть", "пляжи", "виза", "цены"].map((tag) => (
-              <button
-                key={tag}
-                className="px-4 py-1.5 rounded-full bg-white shadow-sm text-sm hover:bg-zinc-100"
-              >
-                {tag}
-              </button>
-            ))}
-          </div>
+          
 
         </div>
       </section>

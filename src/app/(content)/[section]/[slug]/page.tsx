@@ -12,38 +12,35 @@ async function getArticles(): Promise<Article[]> {
 }
 
 export async function generateStaticParams() {
-  const articlesData = await getArticles()
-  const articles = articlesData as Article[]
-
-  // Генерируем параметры для всех существующих разделов
-  return articles.map((section) => ({
-    section: section.slug,   
+  const articles = await getArticles()
+  return articles.map((article) => ({
+    section: article.section,  
+    slug: article.slug,        
   }))
 }
 
 export async function generateMetadata(
   { params }: ArticlePageProps
 ): Promise<Metadata> {
-  const { section: sectionParam } = await params
-  const articles = await getArticles()          
-
-  const article = articles.find(s => s.slug === sectionParam)
+  const { slug } = await params
+  const articles = await getArticles()
+  const article = articles.find(a => a.slug === slug)
 
   if (!article) {
     return {
       title: 'Статья не найдена',
+      description: 'Запрошенная статья не существует',
     }
   }
 
   return {
-    title: article.seo.title,
-    description: article.seo.description,
+    title: article.seo?.title ?? article.title,
+    description: article.seo?.description ?? article.description ?? '',
     keywords: [
       'путешествия',
-      article.title.toLowerCase(),
       'виза',
       'билеты',
-      ...article.seo.keywords
+      ...(article.seo?.keywords ?? [])
     ],
   }
 }
@@ -60,7 +57,6 @@ function isContentBlock(block: unknown): block is ContentBlock {
 export default async function ArticlePage({ params }: ArticlePageProps) {
   const { section, slug } = await params
   const articles = await getArticles()
-
   const article = articles.find(a => a.slug === slug)
 
   if (!article) {

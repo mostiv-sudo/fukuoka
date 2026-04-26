@@ -8,9 +8,9 @@ export interface Subsection {
 export interface Section {
   title: string
   slug: string
-  description?: string
+  description?: string  
   subsections: Subsection[]
-  seo: {
+  seo?: {               
     title: string
     description: string
     keywords: string[]

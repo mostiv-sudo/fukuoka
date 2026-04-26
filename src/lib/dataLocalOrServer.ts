@@ -6,7 +6,6 @@ const isLocal = process.env.NEXT_PUBLIC_STATIC_BACKEND === "true";
 type DataType = "articles" | "sections" | "all";
 
 export default async function getData(type: DataType = "all") {
-  console.log(`[getData] called with type="${type}" | isLocal=${isLocal}`);
 
   if (isLocal) {
     if (type === "articles") return articlesLocal;

@@ -1,11 +1,11 @@
 'use client'
 
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import SearchInput from '@/components/ui/SearchInput';
 import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
+import { cn } from "@/lib/utils";
 import {
   Sheet,
   SheetContent,
@@ -30,6 +30,7 @@ import {
 
 
 
+
 /**
  * Основные пункты меню
  * label — текст
@@ -49,14 +50,55 @@ const menuItems = [
 ]
 
 export function Header() {
+
+  const [showHeader, setShowHeader] = useState(true)
+
   // текущий путь (для active menu)
   const pathname = usePathname()
 
   // состояние мобильного меню
   const [open, setOpen] = useState(false)
 
+useEffect(() => {
+  let lastScroll = window.scrollY
+  let timeout: NodeJS.Timeout
+
+  const handleScroll = () => {
+    const currentScroll = window.scrollY
+
+    if (currentScroll > lastScroll && currentScroll > 50) {
+      setShowHeader(false)
+
+      if (timeout) clearTimeout(timeout)
+
+      // если скролл остановился на 2 сек показать хедер
+
+      timeout = setTimeout(() => {
+        
+        setShowHeader(true)
+      }, 2000)
+
+    } else {
+      setShowHeader(true)
+    }
+
+    lastScroll = currentScroll
+  }
+
+  window.addEventListener("scroll", handleScroll)
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll)
+    if (timeout) clearTimeout(timeout)
+  }
+}, [])
+
   return (
-    <header className="border-b bg-background sticky top-0 z-50">
+    <header 
+      className={`border-b bg-background sticky z-50 transition-all duration-300 ${
+        showHeader ? "top-0" : "-top-20"
+      }`}
+    >
       <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
 
         {/* ========================= */}
