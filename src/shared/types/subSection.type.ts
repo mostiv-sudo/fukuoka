@@ -1,15 +1,16 @@
-export interface Subsection {
+export interface Articles {
   title: string
   slug: string
   description?: string
   icon?: string
 }
 
-export interface Section {
+export interface SubSection {
   title: string
   slug: string
   description?: string  
-  subsections: Subsection[]
+  articles: Articles[]
+  section: string
   seo: {               
     title: string
     description: string
@@ -17,6 +18,6 @@ export interface Section {
   }
 }
 
-export interface SectionPageProps {
-  params: Promise<{ section: string }>
+export interface SubSectionPageProps {
+  params: Promise<{ section: string; subSection: string }>
 }

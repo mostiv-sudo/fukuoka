@@ -33,5 +33,7 @@ export interface Article {
 }
 
 export interface ArticlePageProps {
-  params: Promise<{ section: string; slug: string }>
+  params: Promise<{ 
+    article: string 
+  }>
 }

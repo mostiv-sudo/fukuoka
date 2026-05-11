@@ -1,11 +1,13 @@
 'use client'
 
+import Image from "next/image"
 import Link from "next/link"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { usePathname } from "next/navigation"
 import SearchInput from '@/components/ui/SearchInput';
-import { Button } from "@/components/ui/button"
-import { cn } from "@/lib/utils";
+import HeaderNavButton from "@/components/ui/HeaderNavButton"
+import { useScrollHeader } from "@/hooks/useScrollHeader";
+
 import {
   Sheet,
   SheetContent,
@@ -15,7 +17,8 @@ import {
 } from "@/components/ui/sheet"
 
 import {
-  Search,
+  LifeBuoy ,
+  Search ,
   Menu,
   Plane,
   Hotel,
@@ -27,8 +30,8 @@ import {
   Lightbulb,
   Map as MapIcon
 } from "lucide-react"
-
-
+import { cn } from "@/lib/utils"
+import Logo from "../ui/Logo"
 
 
 /**
@@ -38,99 +41,67 @@ import {
  * icon — иконка lucide
  */
 const menuItems = [
-  { label: "Перед поездкой", path: "/before-trip", icon: Plane },
+  { label: "На острове", path: "/on-island", icon: Plane },
   { label: "Жильё", path: "/accommodation", icon: Hotel },
   { label: "Еда", path: "/food", icon: UtensilsCrossed },
   { label: "Что посмотреть", path: "/on-island/sights", icon: MapPin },
   { label: "Транспорт", path: "/transport", icon: Car },
   { label: "Цены", path: "/prices", icon: DollarSign },
   { label: "Советы", path: "/tips", icon: Lightbulb },
-  { label: "Маршруты", path: "/trip-plan", icon: MapIcon },
-  { label: "Срочно", path: "/practical", icon: AlertCircle },
+  { label: "Маршруты", path: "/catalog", icon: MapIcon },
 ]
 
+
+
 export function Header() {
-
-  const [showHeader, setShowHeader] = useState(true)
-
-  // текущий путь (для active menu)
-  const pathname = usePathname()
-
-  // состояние мобильного меню
-  const [open, setOpen] = useState(false)
-
-useEffect(() => {
-  let lastScroll = window.scrollY
-  let timeout: NodeJS.Timeout
-
-  const handleScroll = () => {
-    const currentScroll = window.scrollY
-
-    if (currentScroll > lastScroll && currentScroll > 50) {
-      setShowHeader(false)
-
-      if (timeout) clearTimeout(timeout)
-
-      // если скролл остановился на 2 сек показать хедер
-
-      timeout = setTimeout(() => {
-        
-        setShowHeader(true)
-      }, 2000)
-
-    } else {
-      setShowHeader(true)
-    }
-
-    lastScroll = currentScroll
-  }
-
-  window.addEventListener("scroll", handleScroll)
-
-  return () => {
-    window.removeEventListener("scroll", handleScroll)
-    if (timeout) clearTimeout(timeout)
-  }
-}, [])
+  const { showHeader } = useScrollHeader();  
+  const pathname = usePathname();
+  const [open, setOpen] = useState(false);
 
   return (
     <header 
-      className={`border-b bg-background sticky z-50 transition-all duration-300 ${
-        showHeader ? "top-0" : "-top-20"
-      }`}
+      className={cn(
+        "border-b border-black/5 sticky z-50 bg-[var(--background-main)] transition-all duration-300 ", 
+        showHeader ? "top-0" : "-top-20",
+      )}
     >
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="px-4 h-20 flex items-center justify-between max-w-7xl mx-auto">
 
         {/* ========================= */}
         {/* Logo */} 
         {/* ========================= */}
-        <Link href="/" className="flex items-center gap-2 font-bold text-lg">
-          🏝️ Фукуок.Гид
-        </Link>
+        <Logo/>
 
 
         {/* ========================= */}
         {/* Desktop navigation */}
         {/* ========================= */}
-        <nav className="hidden xl:flex items-center gap-1">
+        <nav className="hidden xl:flex items-center">
           {menuItems.map((item) => {
             const Icon = item.icon
 
-            // проверка активной страницы
-            const active = pathname.startsWith(item.path)
+            const currentSegment = pathname.split('/').filter(Boolean).pop()
+            const itemSegment = item.path.split('/').filter(Boolean).pop()
 
+            const active = currentSegment === itemSegment
+                        
+            
             return (
-              <Button
+              <HeaderNavButton
                 key={item.path}
-                variant={active ? "secondary" : "ghost"}
-                size="sm"
-                asChild
+                active={active}
               >
-                <Link href={item.path} className="flex items-center gap-1">
+                <Link 
+                  href={item.path} 
+                  className={cn(
+                    "hover-underline center flex items-center gap-1 font-medium leading-5 text-[#314158]  transition-all duration-300",
+                    active ? "text-black active" : "hover:text-black"
+                  )}
+                >
                   <Icon size={16} />
                   {item.label}
                 </Link>
-              </Button>
+              </HeaderNavButton>
             )
           })}
         </nav>
@@ -144,13 +115,23 @@ useEffect(() => {
           {/* ========================= */}
           {/* Search input (desktop) */}
           {/* ========================= */}
-          <div className="hidden sm:flex items-center relative">
-            
+          <div className="hidden sm:flex gap-6 items-center relative">
 
-            <SearchInput 
+            {/* <SearchInput 
               placeholder="Поиск..."
               isSmall={true}
-            />
+            /> */}
+
+            <Search className="text-[#45556C]"/>
+            <button className="
+              w-[166px] h-[40px] rounded-2xl bg-[var(--color-main)] 
+              shadow-[0_1px_2px_-1px_rgba(0,0,0,0.1),0_1px_3px_0_rgba(0,0,0,0.1)] 
+              text-white hover:opacity-90 active:scale-[0.98] transition-300
+              font-medium leading-5 flex items-center gap-[17px] pl-6 
+            ">
+              <LifeBuoy size={18} />
+              Помощь
+            </button>
           </div>
 
 
@@ -161,9 +142,9 @@ useEffect(() => {
 
             {/* кнопка открытия */}
             <SheetTrigger asChild className="xl:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="w-5 h-5" />
-              </Button>
+              {/* <Button variant="ghost" size="icon">
+                <Menu className="w-10 h-10" />
+              </Button> */}
             </SheetTrigger>
 
             {/* ========================= */}
@@ -186,7 +167,7 @@ useEffect(() => {
                 />
 
                 {/* mobile menu items */}
-                {menuItems.map((item) => {
+                {/* {menuItems.map((item) => {
                   const Icon = item.icon
                   const active = pathname.startsWith(item.path)
 
@@ -204,7 +185,7 @@ useEffect(() => {
                       </Link>
                     </Button>
                   )
-                })}
+                })} */}
 
                 
                 

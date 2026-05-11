@@ -4,7 +4,7 @@ import * as React from "react"
 import { Dialog as SheetPrimitive } from "radix-ui"
 
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+// import { Button } from "@/components/ui/HeaderNavButton"
 import { XIcon } from "@phosphor-icons/react"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
@@ -70,7 +70,7 @@ function SheetContent({
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close data-slot="sheet-close" asChild>
-            <Button
+            {/* <Button
               variant="ghost"
               className="absolute top-3 right-3"
               size="icon-sm"
@@ -78,7 +78,7 @@ function SheetContent({
               <XIcon
               />
               <span className="sr-only">Close</span>
-            </Button>
+            </Button> */}
           </SheetPrimitive.Close>
         )}
       </SheetPrimitive.Content>

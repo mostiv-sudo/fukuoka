@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
 import getData from '@/lib/api/data_LocalOrServer'
-import type { Section, SectionPageProps } from '@/shared/types/section.type'
+import type { SubSection, SubSectionPageProps } from '@/shared/types/subSection.type'
 import Link from 'next/link'
 import {
   FileText,
@@ -26,29 +26,31 @@ const icons = {
   packing: Package
 }
 
-async function getSections(): Promise<Section[]> {
-  const sectionsData = Object.values(await getData('sections'))
-  return sectionsData as Section[]
+async function getSections(): Promise<SubSection[]> {
+  const sectionsData = Object.values(await getData('subSections'))
+  return sectionsData as SubSection[]
 }
 
 // ---------- ГЕНЕРАЦИЯ СТАТИЧЕСКИХ ПАРАМЕТРОВ ----------
 export async function generateStaticParams() {
-  const sections = await getSections()
-  return sections.map((section) => ({
-    section: section.slug,
+  const subSection = await getSections()
+  return subSection.map((subSection) => ({
+    section: subSection.section,
+    subSection: subSection.slug,
   }))
 }
 
 // ---------- МЕТАДАННЫЕ ----------
 export async function generateMetadata({
   params,
-}: SectionPageProps): Promise<Metadata> {
-  const { section: sectionParam } = await params
-  const sections = await getSections()
-  const section = sections.find((s) => s.slug === sectionParam)
+}: SubSectionPageProps): Promise<Metadata> {
+  const { subSection: sectionParam } = await params
 
-  if (!section) {
-    console.error('❌ Section not found:', sectionParam)
+  const subSections = await getSections()
+  const subSection = subSections.find((s) => s.slug === sectionParam)
+
+  if (!subSection) {
+    console.error('❌ SubSection not found:', sectionParam)
     return {
       title: 'Раздел не найден',
       description: 'Такой раздел не существует',
@@ -56,24 +58,24 @@ export async function generateMetadata({
   }
 
   return {
-    title: section.seo.title ?? section.title,
-    description: section.seo.description ?? section.description ?? '',
-    keywords: section.seo.keywords ?? [],
+    title: subSection.seo.title ?? subSection.title,
+    description: subSection.seo.description ?? subSection.description ?? '',
+    keywords: subSection.seo.keywords ?? [],
   }
 }
 
-export default async function SectionPage({ params }: SectionPageProps) {
-  const { section: sectionParam } = await params
-  const sections = await getSections()   
+export default async function SubSectionPage({ params }: SubSectionPageProps) {
+  const {subSection: subSectionParam } = await params
+  const subSections = await getSections()   
   
-  const section = Object.values(sections).find(
-    s => s.slug === sectionParam
-  ) as Section | undefined
+  const subSection = Object.values(subSections).find(
+    s => s.slug === subSectionParam
+  ) as SubSection | undefined
 
-  if (!section) {
+  if (!subSection) {
     return (
       <div className="p-10 text-center text-2xl">
-        Раздел не найден
+        Под раздел не найден
       </div>
     )
   }
@@ -82,14 +84,14 @@ export default async function SectionPage({ params }: SectionPageProps) {
     <div className="bg-zinc-50 min-h-[calc(100vh-80px)] py-12">
 
       <div className="max-w-7xl mx-auto px-4">
-
         <Link
-          href={`/`}
+          href={`/${subSection.section}`}
           className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6"
         >
           <ArrowLeft size={18} />
           Назад
         </Link>
+
 
         {/* Header */}
         <div className="mb-12">
@@ -97,17 +99,18 @@ export default async function SectionPage({ params }: SectionPageProps) {
           {/* хлебные крошки  */}
           <Breadcrumbs
             URL={{
-              section: section.slug,
+              section: subSection.section,
+              subsection: subSection.slug,
             }}
           />
 
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            {section.title}
+            {subSection.title}
           </h1>
 
-          {section.description && (
+          {subSection.description && (
             <p className="text-xl text-muted-foreground">
-              {section.description}
+              {subSection.description}
             </p>
           )}
         </div>
@@ -115,16 +118,14 @@ export default async function SectionPage({ params }: SectionPageProps) {
         {/* Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
-          {section.subsections.map((sub) => {
-            console.log(sub);
-            
+          {subSection.articles.map((article) => {
             const Icon =
-              icons[sub.slug as keyof typeof icons] || FileText
+              icons[article.slug as keyof typeof icons] || FileText
 
             return (
               <Link
-                key={sub.slug}
-                href={`/${section.slug}/${sub.slug}`}
+                key={article.slug}
+                href={`/${subSection.section}/${subSection.slug}/${article.slug}`}
                 className="
                   group
                   bg-white
@@ -154,12 +155,12 @@ export default async function SectionPage({ params }: SectionPageProps) {
                 </div>
 
                 <h2 className="text-xl font-semibold mb-2">
-                  {sub.title}
+                  {article.title}
                 </h2>
 
-                {sub.description && (
+                {article.description && (
                   <p className="text-muted-foreground text-sm">
-                    {sub.description}
+                    {article.description}
                   </p>
                 )}
               </Link>
@@ -184,11 +185,12 @@ export default async function SectionPage({ params }: SectionPageProps) {
 
           <div className="grid md:grid-cols-4 gap-6">
 
-            {section.subsections.slice(0,4).map((sub, i) => (
-              <div key={sub.slug} className="flex gap-3">
+            {subSection.articles.slice(0,4).map((article, i) => (
+              <div key={article.slug} className="flex gap-3">
 
                 <div className="
                   w-8 h-8
+                  shrink-0
                   rounded-full
                   bg-white
                   text-blue-600
@@ -202,12 +204,12 @@ export default async function SectionPage({ params }: SectionPageProps) {
 
                 <div>
                   <div className="font-medium">
-                    {sub.title}
+                    {article.title}
                   </div>
 
-                  <Link className="text-sm text-blue-100" href={`/${section.slug}/${sub.slug}`}>
+                  <div className="text-sm text-blue-100">
                     Подробнее
-                  </Link>
+                  </div>
                 </div>
 
               </div>

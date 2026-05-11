@@ -54,7 +54,7 @@ export default function RootLayout({
         jetbrainsMono.variable
       )}
     >
-      <body className="min-h-screen flex flex-col bg-background">
+      <body className="min-h-screen flex flex-col bg-[var(--background-main)] text-[var(--color-main)]">
 
         {/* Header */}
         <Header />

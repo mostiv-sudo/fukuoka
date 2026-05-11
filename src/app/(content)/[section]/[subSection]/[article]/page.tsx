@@ -1,9 +1,10 @@
-import getData from '@/lib/dataLocalOrServer'
+import getData from '@/lib/api/data_LocalOrServer'
 import Link from 'next/link'
 // вынес типы в отделный файл
 import type {ContentBlock, Article , ArticlePageProps, } from '@/shared/types/article.type' 
 import { ArrowLeft, Clock, Calendar } from "lucide-react"
 import type { Metadata } from 'next'
+import Breadcrumbs from '@/components/ui/Breadcrumbs'
 
 
 async function getArticles(): Promise<Article[]> {
@@ -15,16 +16,17 @@ export async function generateStaticParams() {
   const articles = await getArticles()
   return articles.map((article) => ({
     section: article.section,  
-    slug: article.slug,        
+    subSection: article.subsection,
+    article: article.slug,        
   }))
 }
 
 export async function generateMetadata(
   { params }: ArticlePageProps
 ): Promise<Metadata> {
-  const { slug } = await params
+  const { article: articleParam } = await params
   const articles = await getArticles()
-  const article = articles.find(a => a.slug === slug)
+  const article = articles.find(a => a.slug === articleParam)
 
   if (!article) {
     return {
@@ -34,13 +36,13 @@ export async function generateMetadata(
   }
 
   return {
-    title: article.seo?.title ?? article.title,
-    description: article.seo?.description ?? article.description ?? '',
+    title: article.seo.title ?? article.title,
+    description: article.seo.description ?? article.description ?? '',
     keywords: [
       'путешествия',
       'виза',
       'билеты',
-      ...(article.seo?.keywords ?? [])
+      ...(article.seo.keywords ?? [])
     ],
   }
 }
@@ -55,9 +57,10 @@ function isContentBlock(block: unknown): block is ContentBlock {
 }
 
 export default async function ArticlePage({ params }: ArticlePageProps) {
-  const { section, slug } = await params
+  const {article: articleParam } = await params
+  
   const articles = await getArticles()
-  const article = articles.find(a => a.slug === slug)
+  const article = articles.find(a => a.slug === articleParam)
 
   if (!article) {
     return (
@@ -68,12 +71,12 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
 
   return (
-    <div className="bg-zinc-50 min-h-screen">
+    <div className="bg-zinc-50 min-h-[calc(100vh-80px)]">
       <div className="max-w-4xl mx-auto px-4 py-12">
 
         {/* Back */}
         <Link
-          href={`/${section}`}
+          href={`/${article.section}/${article.subsection}`}
           className="inline-flex items-center gap-2 text-blue-600 hover:text-blue-700 mb-6"
         >
           <ArrowLeft size={18} />
@@ -84,16 +87,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
 
           {/* Header */}
           <div className="mb-8">
-
-            <div className="text-sm text-muted-foreground mb-2">
-              <Link href={`/${article.section}`} className="hover:underline">
-                {article.section}
-              </Link>
-              / 
-              <Link href={`/${article.section}/${article.subsection}`} className="hover:underline">
-                {article.subsection}
-              </Link>
-            </div>
+            {/* хлебные крошки  */}
+            <Breadcrumbs
+              URL={{
+                section: article.section,
+                subsection: article.subsection,
+                article: article.slug
+              }}
+            />
 
             <h1 className="text-4xl md:text-5xl font-bold mb-4">
               {article.title}
@@ -126,12 +127,14 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
               if (!isContentBlock(block)) return null
 
               if (block.type === 'text') {
-                return <p key={i}>{block.text}</p>
+                return <p key={i} className="mb-2 text-lg">
+                  {block.text}
+                </p>
               }
 
               if (block.type === 'list' && block.items?.length) {
                 return (
-                  <ul key={i}>
+                  <ul key={i} className="list-disc pl-6">
                     {block.items.map((item, j) => (
                       <li key={j}>{item}</li>
                     ))}

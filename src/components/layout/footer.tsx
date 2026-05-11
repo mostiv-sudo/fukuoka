@@ -1,177 +1,131 @@
 import Link from "next/link"
+import Image from 'next/image';
+import Logo from "../ui/Logo"
+import FooterNavSection from "../ui/FooterNavSection"
+
+export const socialItems = [
+  {
+    href: "https://youtube.com",
+    label: "YouTube",
+    icon: "/svg/youtube.svg",
+  },
+
+  {
+    href: "https://instagram.com",
+    label: "Instagram",
+    icon: "/svg/instagram.svg",
+  },
+
+  {
+    href: "https://telegram.org",
+    label: "Telegram",
+    icon: "/svg/telegram.svg",
+  },
+]
+
+const footerNavSections = {
+  Планирование: [
+    { href: '/before-trip/when-to-go', label: 'Когда ехать' },
+    { href: '/before-trip/visa', label: 'Виза' },
+    { href: '/before-trip/budget', label: 'Бюджет' },
+    { href: '/before-trip/how-to-get', label: 'Как добраться' },
+    { href: '/before-trip/insurance', label: 'Страховка' },
+  ],
+
+  "На острове": [
+    { href: '/accommodation', label: 'Жильё' },
+    { href: '/food', label: 'Еда' },
+    { href: '/transport', label: 'Транспорт' },
+    { href: '/on-island/beaches', label: 'Пляжи' },
+    { href: '/on-island/entertainment', label: 'Развлечения' },
+  ],
+
+  Практика: [
+    { href: '/prices', label: 'Деньги' },
+    { href: '/practical/internet', label: 'Связь и интернет' },
+    { href: '/practical/pharmacy', label: 'Аптеки и медицина' },
+    { href: '/shops', label: 'Магазины' },
+    { href: '/practical/safety', label: 'Безопасность' },
+  ],
+
+  Маршруты: [
+    { href: '/routes/1-day', label: 'Маршруты на 1 день' },
+    { href: '/routes/3-days', label: 'Маршруты на 3 дня' },
+    { href: '/routes/7-days', label: 'Маршруты на 7 дней' },
+    { href: '/routes/north', label: 'Север острова' },
+    { href: '/routes/south', label: 'Юг острова' },
+  ],
+}
 
 export function Footer() {
   return (
-    <footer className="bg-gray-950 text-gray-300 mt-16 border-t">
+    <footer className="bg-[var(--background-main)] mt-20">
       <div className="max-w-7xl mx-auto px-4 py-12">
 
-        {/* =============================== */}
-        {/* Top */}
-        {/* =============================== */}
         <div className="grid gap-8 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
 
           {/* Brand */}
           <div className="lg:col-span-1">
-            <Link
-              href="/"
-              className="font-bold text-lg text-white flex items-center gap-2"
-            >
-              🏝️ Фукуок.Гид
-            </Link>
+            <Logo />
 
-            <p className="mt-3 text-sm text-gray-400">
-              Полный гид по острову Фукуок: жильё, еда, транспорт,
-              маршруты и практические советы.
+            <p className="mt-3 text-sm leading-6 text-[var(--color-paragraph)]">
+              Практичный гид по жизни и отдыху на острове Фукуок.
+              Актуальная информация, проверенные места и полезные
+              советы для туристов и экспатов.
             </p>
+
+            {/* Socials */}
+            <div className="flex items-center gap-4 mt-7">
+              {socialItems.map((item) => (
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  className="transition-all duration-300 hover:-translate-y-1 hover:scale-120"
+                >
+                  <Image
+                    src={item.icon}
+                    alt={item.label}
+                    width={32}
+                    height={32}
+                  />
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* Планирование */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">
-              Планирование
-            </h3>
-
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/before-trip/when-to-go" className="hover:text-white">
-                  Когда ехать
-                </Link>
-              </li>
-              <li>
-                <Link href="/before-trip/visa" className="hover:text-white">
-                  Виза
-                </Link>
-              </li>
-              <li>
-                <Link href="/before-trip/prices" className="hover:text-white">
-                  Бюджет
-                </Link>
-              </li>
-              <li>
-                <Link href="/accommodation" className="hover:text-white">
-                  Где жить
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* На острове */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">
-              На острове
-            </h3>
-
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/food" className="hover:text-white">
-                  Где поесть
-                </Link>
-              </li>
-              <li>
-                <Link href="/on-island/sights" className="hover:text-white">
-                  Достопримечательности
-                </Link>
-              </li>
-              <li>
-                <Link href="/transport" className="hover:text-white">
-                  Транспорт
-                </Link>
-              </li>
-              <li>
-                <Link href="/on-island/beaches" className="hover:text-white">
-                  Пляжи
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Практика */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">
-              Практика
-            </h3>
-
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/practical/sim-card" className="hover:text-white">
-                  SIM-карта
-                </Link>
-              </li>
-              <li>
-                <Link href="/practical/pharmacy" className="hover:text-white">
-                  Аптека
-                </Link>
-              </li>
-              <li>
-                <Link href="/practical/emergency" className="hover:text-white">
-                  Скорая помощь
-                </Link>
-              </li>
-              <li>
-                <Link href="/tips/faq" className="hover:text-white">
-                  FAQ
-                </Link>
-              </li>
-            </ul>
-          </div>
-
-          {/* Маршруты */}
-          <div>
-            <h3 className="font-semibold text-white mb-4">
-              Маршруты
-            </h3>
-
-            <ul className="space-y-2 text-sm">
-              <li>
-                <Link href="/trip-plan/routes/1-day" className="hover:text-white">
-                  1 день
-                </Link>
-              </li>
-              <li>
-                <Link href="/trip-plan/routes/3-days" className="hover:text-white">
-                  3 дня
-                </Link>
-              </li>
-              <li>
-                <Link href="/trip-plan/routes/5-days" className="hover:text-white">
-                  5 дней
-                </Link>
-              </li>
-              <li>
-                <Link href="/trip-plan/routes/7-days" className="hover:text-white">
-                  7+ дней
-                </Link>
-              </li>
-            </ul>
-          </div>
-
+          {Object.entries(footerNavSections).map(([title, items]) => (
+            <FooterNavSection
+              key={title}
+              title={title}
+              items={items}
+            />
+          ))}
         </div>
 
-        {/* =============================== */}
-        {/* Divider */}
-        {/* =============================== */}
-        <div className="border-t border-gray-800 my-8" />
+        <div className="border-t border-[#e2e8f0] mb-8 mt-16"/>
 
-        {/* =============================== */}
-        {/* Bottom */}
-        {/* =============================== */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[#90A1B9]">sww
 
-          <p className="text-gray-400 text-center md:text-left">
-            © 2026 Фукуок.Гид — Полный информационный портал
+          <p className="text-center md:text-left">
+            © 2026 Phuquoc Club — Все права защищены
           </p>
 
-          <div className="flex items-center gap-4 text-gray-500">
-            <Link href="/about" className="hover:text-white">
+          <div className="flex items-center gap-4">
+            <Link href="/about" className="">
               О проекте
             </Link>
 
-            <Link href="/contacts" className="hover:text-white">
-              Контакты
+            <Link href="/contacts" className="">
+              Реклама
             </Link>
 
-            <Link href="/privacy" className="hover:text-white">
-              Privacy
+            <Link href="/contacts" className="">
+              Контакты
+            </Link>
+            
+            <Link href="/privacy" className="">
+              Политика конфиденциальности
             </Link>
           </div>
 
