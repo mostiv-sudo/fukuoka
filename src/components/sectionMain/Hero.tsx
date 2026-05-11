@@ -11,15 +11,15 @@ export default function Hero({
 
     return (
         <section className={cn(
-            "flex px-4 pt-16 pb-24 items-center justify-between gap-12",
+            "relative flex max-xl:flex-col px-4 pt-16 pb-24 items-center justify-between gap-12 overflow-hidden min-h-[calc(100vh-80px)] max-xl:justify-center max-sm:pt-10 max-sm:pb-20",
             className
         )}>
             <div>
-                <h1 className="font-medium text-[76px] tracking-tight">
+                <h1 className="font-medium text-[76px] tracking-tight text-nowrap max-xl:text-white max-sm:text-[44px]">
                     Гид по Фукуоку
                 </h1>
 
-                <p className=" mt-4 font-normal text-2xl leading-snug text-[#45556C]">
+                <p className=" mt-4 font-normal text-2xl leading-snug text-[#45556C] max-xl:text-white/80 max-sm:text-xl">
                     Всё что нужно туристу - быстро и понятно
                 </p>
 
@@ -27,19 +27,22 @@ export default function Hero({
                 <div className="mt-8">
                     <SearchInput 
                         placeholder="Поиск по сайту: пляжи, отели, еда, транспорт..."
+                        tags={true}
                     />
                 </div>   
             </div>
 
-            <div>
-                <Image 
-                src="/hero-image.png" 
-                alt="Hero"
-                width={640} height={520} 
-                className="rounded-4xl"
+            <div className="xl:relative max-xl:absolute max-xl:inset-0 -z-10 xl:w-[620px] xl:h-[520px]">
+                <Image
+                    src="/hero-image.png"
+                    alt="Hero"
+                    fill
+                    className="
+                    xl:rounded-4xl
+                    object-cover
+                    "
                 />
             </div>
-            
         </section>
     )
 }

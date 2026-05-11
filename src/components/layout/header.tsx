@@ -1,12 +1,13 @@
 'use client'
 
-import Image from "next/image"
 import Link from "next/link"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { usePathname } from "next/navigation"
 import SearchInput from '@/components/ui/SearchInput';
 import HeaderNavButton from "@/components/ui/HeaderNavButton"
 import { useScrollHeader } from "@/hooks/useScrollHeader";
+import { cn } from "@/lib/utils"
+import Logo from "../ui/Logo"
 
 import {
   Sheet,
@@ -17,8 +18,8 @@ import {
 } from "@/components/ui/sheet"
 
 import {
-  LifeBuoy ,
-  Search ,
+  LifeBuoy,
+  Search,
   Menu,
   Plane,
   Hotel,
@@ -26,20 +27,11 @@ import {
   MapPin,
   Car,
   DollarSign,
-  AlertCircle,
   Lightbulb,
   Map as MapIcon
 } from "lucide-react"
-import { cn } from "@/lib/utils"
-import Logo from "../ui/Logo"
 
 
-/**
- * Основные пункты меню
- * label — текст
- * path — ссылка
- * icon — иконка lucide
- */
 const menuItems = [
   { label: "На острове", path: "/on-island", icon: Plane },
   { label: "Жильё", path: "/accommodation", icon: Hotel },
@@ -51,12 +43,37 @@ const menuItems = [
   { label: "Маршруты", path: "/catalog", icon: MapIcon },
 ]
 
-
-
 export function Header() {
   const { showHeader } = useScrollHeader();  
   const pathname = usePathname();
+  
   const [open, setOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(false); // для анимации
+
+  // Открытие поиска
+  const openSearch = () => {
+    setIsSearchOpen(true);
+    // Небольшая задержка для запуска анимации
+    setTimeout(() => setIsSearchVisible(true), 10);
+  };
+
+  // Закрытие поиска с анимацией
+  const closeSearch = () => {
+    setIsSearchVisible(false);
+    setTimeout(() => {
+      setIsSearchOpen(false);
+    }, 300);
+  };
+
+  // Закрытие по Esc
+  useEffect(() => {
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && isSearchOpen) closeSearch();
+    };
+    window.addEventListener("keydown", handleEsc);
+    return () => window.removeEventListener("keydown", handleEsc);
+  }, [isSearchOpen]);
 
   return (
     <header 
@@ -67,34 +84,21 @@ export function Header() {
     >
       <div className="px-4 h-20 flex items-center justify-between max-w-7xl mx-auto">
 
-        {/* ========================= */}
-        {/* Logo */} 
-        {/* ========================= */}
-        <Logo/>
+        <Logo />
 
-
-        {/* ========================= */}
-        {/* Desktop navigation */}
-        {/* ========================= */}
         <nav className="hidden xl:flex items-center">
           {menuItems.map((item) => {
             const Icon = item.icon
-
             const currentSegment = pathname.split('/').filter(Boolean).pop()
             const itemSegment = item.path.split('/').filter(Boolean).pop()
-
             const active = currentSegment === itemSegment
-                        
-            
+
             return (
-              <HeaderNavButton
-                key={item.path}
-                active={active}
-              >
+              <HeaderNavButton key={item.path} active={active}>
                 <Link 
                   href={item.path} 
                   className={cn(
-                    "hover-underline center flex items-center gap-1 font-medium leading-5 text-[#314158]  transition-all duration-300",
+                    "hover-underline center flex items-center gap-1 font-medium leading-5 text-[#314158] transition-all duration-300",
                     active ? "text-black active" : "hover:text-black"
                   )}
                 >
@@ -106,96 +110,65 @@ export function Header() {
           })}
         </nav>
 
-
-        {/* ========================= */}
-        {/* Right side */}
-        {/* ========================= */}
         <div className="flex items-center gap-2">
+          <div className=" flex gap-6 items-center relative max-[500px]:gap-2">
+            <button 
+              onClick={openSearch}
+              className="p-2 hover:bg-[#004E4A33] rounded-xl transition-colors duration-300 max-[500px]:hidden"
+            >
+              <Search className="text-[#45556C]" />
+            </button>
 
-          {/* ========================= */}
-          {/* Search input (desktop) */}
-          {/* ========================= */}
-          <div className="hidden sm:flex gap-6 items-center relative">
+            <button 
+              onClick={() => setOpen(true)}
+              className="xl:hidden"
+            >
+              <Menu className="text-[#45556C]" />
+            </button>
 
-            {/* <SearchInput 
-              placeholder="Поиск..."
-              isSmall={true}
-            /> */}
-
-            <Search className="text-[#45556C]"/>
             <button className="
               w-[166px] h-[40px] rounded-2xl bg-[var(--color-main)] 
               shadow-[0_1px_2px_-1px_rgba(0,0,0,0.1),0_1px_3px_0_rgba(0,0,0,0.1)] 
-              text-white hover:opacity-90 active:scale-[0.98] transition-300
-              font-medium leading-5 flex items-center gap-[17px] pl-6 
+              text-white hover:opacity-90 active:scale-[0.98] transition-all
+              font-medium leading-5 flex items-center gap-[17px] 
+              sm:pl-6 max-sm:w-[110px] max-sm:justify-center max-sm:text-sm max-sm:gap-2.5 
             ">
-              <LifeBuoy size={18} />
+              <LifeBuoy size={18}/>
               Помощь
             </button>
           </div>
 
-
-          {/* ========================= */}
-          {/* Mobile menu */}
-          {/* ========================= */}
-          <Sheet open={open} onOpenChange={setOpen}>
-
-            {/* кнопка открытия */}
-            <SheetTrigger asChild className="xl:hidden">
-              {/* <Button variant="ghost" size="icon">
-                <Menu className="w-10 h-10" />
-              </Button> */}
-            </SheetTrigger>
-
-            {/* ========================= */}
-            {/* Mobile sidebar */}
-            {/* ========================= */}
-            <SheetContent side="left" className="w-[300px]">
-
-              {/* REQUIRED для accessibility */}
-              <SheetHeader>
-                <SheetTitle>Меню</SheetTitle>
-              </SheetHeader>
-
-              <div className="flex flex-col gap-2 mt-6">
-
-                {/* mobile search button */}
-                <SearchInput 
-                  placeholder="Поиск..." 
-                  isSmall={true} 
-                  classMore="w-full"
-                />
-
-                {/* mobile menu items */}
-                {/* {menuItems.map((item) => {
-                  const Icon = item.icon
-                  const active = pathname.startsWith(item.path)
-
-                  return (
-                    <Button
-                      key={item.path}
-                      variant={active ? "secondary" : "ghost"}
-                      className="justify-start"
-                      asChild
-                      onClick={() => setOpen(false)}
-                    >
-                      <Link href={item.path}>
-                        <Icon className="w-4 h-4 mr-2" />
-                        {item.label}
-                      </Link>
-                    </Button>
-                  )
-                })} */}
-
-                
-                
-
-              </div>
-            </SheetContent>
-          </Sheet>
-
         </div>
       </div>
+
+      {isSearchOpen && (
+        <div 
+          className={cn(
+            "fixed inset-0 z-[100] bg-black/70 backdrop-blur-md flex items-start justify-center pt-28 px-4 transition-opacity duration-300",
+            isSearchVisible ? "opacity-100" : "opacity-0"
+          )}
+          onClick={closeSearch}
+        >
+          <div 
+            className={cn(
+              "w-full max-w-2xl transition-all duration-300",
+              isSearchVisible 
+                ? "opacity-100 scale-100" 
+                : "opacity-0 scale-95"
+            )}
+            onClick={e => e.stopPropagation()}
+          >
+            <SearchInput 
+              placeholder="Поиск..." 
+              classMore="shadow-2xl"
+            />
+
+            <p className="text-center text-white/70 text-sm mt-6">
+              Нажмите ESC или кликните по тёмному фону чтобы закрыть
+            </p>
+          </div>
+        </div>
+      )}
     </header>
   )
 }

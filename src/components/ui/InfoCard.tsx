@@ -16,14 +16,14 @@ function InfoCard({
    arr 
 }: InfoCardProps) {
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 justify-baseline">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(290px,1fr))] gap-6">
       {arr.map((item) => {
         const Icon = item.icon
 
         return (
           <div
             key={item.href}
-            className="flex flex-col p-6 rounded-[22px] w-[290px] h-[210px] shadow-[0_4px_24px_0_rgba(0,0,0,0.03)] bg-white"
+            className="flex flex-col p-6 rounded-[22px] h-[210px] shadow-[0_4px_24px_0_rgba(0,0,0,0.03)] bg-white"
           >
             <div className="flex items-center gap-4 mb-4">
               <span className="flex items-center justify-center bg-[#004E4A0D] rounded-[14px] px-3 w-12 h-12">
@@ -58,9 +58,10 @@ function InfoCard({
 
 function ArticlesCollectionCard() {
     return (
-        <div className="grid md:grid-cols-3 justify-baseline">
+      <div className="overflow-x-auto">
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6">
             {[1,2,3].map((i) => (
-            <div key={i} className="flex gap-6 p-3 justify-between items-center bg-white rounded-[20px] w-[394px] h-[225px] shadow-[0_4px_24px_0_rgba(0,0,0,0.04)]">
+            <div key={i} className="flex gap-6 p-3 justify-between items-center bg-white rounded-[20px] w-[50wv] shadow-[0_4px_24px_0_rgba(0,0,0,0.04)]">
                 <div className='p-3 pr-0 flex flex-col h-full'>
                     <span className='text-[var(--color-accent)] font-bold text-xs leading-snug tracking-wider mb-3'>
                         ТРАНСПОРТ
@@ -80,23 +81,26 @@ function ArticlesCollectionCard() {
                         <Clock size={14}/>6 мин чтения
                     </span>
                 </div>
-                <Image
+                <div className="relative w-[90px] h-[120px] sm:w-[110px] sm:h-[196px] shrink-0">
+                  <Image
                     src="/ImageWithFallback.png"
-                    alt='WithFallback'
-                    width={114}
-                    height={196}  
-                />
+                    alt="WithFallback"
+                    fill
+                    className="object-cover rounded-xl"
+                  />
+                </div>
             </div>
             ))}
         </div>
+      </div>
     )
 }
 
 function CollectionsCard() {
   return (
-    <div className="grid md:grid-cols-3 justify-baseline">
+    <div className="grid grid-cols-[repeat(auto-fit,minmax(320px,1fr))] gap-6">
       {[1,2,3].map((i) => (
-        <div key={i} className="group relative rounded-[22px] p-6 w-[394px] h-[250px] overflow-hidden  ">
+        <div key={i} className="group relative rounded-[22px] p-6 h-[250px] overflow-hidden  ">
           <Image
             src="/collection.png"
             alt="Collection"

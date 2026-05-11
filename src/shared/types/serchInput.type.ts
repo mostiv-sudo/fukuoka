@@ -35,6 +35,7 @@ export interface PagesSearchProps {
   isSmall?: boolean;
   placeholder: string;
   classMore?: string;
+  tags?: boolean
   // arrTags?: { 
   //   label: string;
   //   icon: LucideIcon 

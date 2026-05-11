@@ -46,7 +46,7 @@ export default function PagesSearch({
     isSmall = false,
     placeholder, 
     classMore = "",
-    // arrTags,
+    tags = false,
  }: PagesSearchProps) {
 
   const [serverData, setServerData] = useState<ServerData | null>(null)
@@ -130,7 +130,7 @@ export default function PagesSearch({
 
   return (
     <>  
-      <div ref={wrapperRef} className="relative flex items-center">
+      <div ref={wrapperRef} className="relative flex items-center ">
 
         {/* Иконка поиска */}
         {isSmall 
@@ -144,7 +144,7 @@ export default function PagesSearch({
           placeholder={placeholder}
           className={
             cn(
-              "placeholder:text-[#1D293D] ",
+              "placeholder:text-[#1D293D] text-[#1D293D] bg-white",
               classForSize
             )
           }
@@ -206,12 +206,12 @@ export default function PagesSearch({
       </div>
       
       {/* Tags */}
-      {arrTags?.length && (
-        <div className="flex flex-wrap justify-start gap-3 mt-4 max-w-[500px]">
+      {tags && (
+        <div className="flex flex-wrap justify-start gap-3 mt-4 max-w-[500px] max-sm:gap-1.5">
           {arrTags.map((tag) => (
             <button
               key={tag.label}
-              className="px-4 py-2.5 rounded-full bg-white shadow-sm text-sm hover:bg-zinc-100 text-[#314158]"
+              className="px-4 py-2.5 rounded-full bg-white shadow-sm text-sm hover:bg-zinc-100 text-[#314158] max-sm:text-xs max-sm:px-2 max-sm:py-2"
               onClick={() => {setQuery(tag.label)}}
             >
               <tag.icon 

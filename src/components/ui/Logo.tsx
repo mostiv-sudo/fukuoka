@@ -5,7 +5,7 @@ export default function Logo() {
     return (
         <Link href="/" className="flex items-center gap-2 font-bold text-lg">
             <Image src="/logo-small.png" alt="Phuquoc.Club" width={40} height={40} />
-            <span className="text-xl text-bold leading-[1.4]">Phuquoc.<span className="text-[var(--color-accent)]">Club</span></span>
+            <span className="sm:text-xl text-bold leading-[1.4]">Phuquoc.<span className="text-[var(--color-accent)]">Club</span></span>
         </Link>
     )
 }

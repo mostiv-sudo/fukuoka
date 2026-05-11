@@ -185,3 +185,10 @@
 .bg-urgent {
   background-image: url("../../public/bg-urgent.png");
 }
+
+@keyframes searchPop {
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

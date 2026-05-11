@@ -105,13 +105,13 @@ export function Footer() {
 
         <div className="border-t border-[#e2e8f0] mb-8 mt-16"/>
 
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[#90A1B9]">sww
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-[#90A1B9] text-xs">
 
           <p className="text-center md:text-left">
             © 2026 Phuquoc Club — Все права защищены
           </p>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center flex-wrap gap-4 max-md:border-t max-md:border-[#e2e8f0] max-sm:gap-2.5 text-nowrap max-sm:justify-center">
             <Link href="/about" className="">
               О проекте
             </Link>
